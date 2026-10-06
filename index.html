@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitch Coffee Shop — Handcrafted Artisanal Coffee & Lattes</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lavender: {
+                            50: '#FAF7FF',
+                            100: '#F0E5FF',
+                            200: '#EADCFF',
+                            300: '#CBB2F0',
+                            400: '#A473DE',
+                            500: '#8051BD',
+                            600: '#6938A6',
+                            700: '#4D287A',
+                            800: '#391B5E',
+                            900: '#24152C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #FAF7FF; color: #24152C; }
+        .glass-header { background: rgba(250, 247, 255, 0.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .drink-card-img { transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .drink-card:hover .drink-card-img { transform: scale(1.08); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAF7FF; }
+        ::-webkit-scrollbar-thumb { background: #CBB2F0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A473DE; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }   
+    </style>
+</head>
+<body class="antialiased selection:bg-lavender-200 selection:text-lavender-900">
+    <!-- Top Announcement Bar -->
+    <div class="bg-lavender-800 text-lavender-100 text-xs py-2 px-4 text-center tracking-wide flex justify-center items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+        <span>Freshly Roasted 100% Arabica Specialty Coffee • Pick-up & Express Delivery Available!</span>
+    </div>
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 glass-header border-b border-lavender-200/60 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-2xl bg-lavender-200 flex items-center justify-center text-lavender-700 group-hover:bg-lavender-600 group-hover:text-white transition-colors duration-300 shadow-sm">
+                        <i class="fa-solid fa-mug-hot text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="font-serif text-2xl font-bold tracking-tight text-lavender-900 block leading-none">Mitch</span>
+                        <span class="text-[10px] tracking-widest uppercase text-lavender-600 font-bold block mt-0.5">COFFEE SHOP ☕</span>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-lavender-800">
+                    <a href="#menu-section" class="hover:text-lavender-500 transition-colors">Menu</a>
+                    <a href="#quick-links" class="hover:text-lavender-500 transition-colors">Quick Links</a>
+                    <a href="#store-info" class="hover:text-lavender-500 transition-colors">Hours & Info</a>
+                    <a href="#reviews" class="hover:text-lavender-500 transition-colors">Reviews</a>
+                    <a href="#faq" class="hover:text-lavender-500 transition-colors">FAQ</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <a href="tel:+639380191803" class="hidden sm:flex items-center gap-2 text-xs font-bold text-lavender-700 bg-lavender-100 hover:bg-lavender-200 px-3.5 py-2 rounded-full transition-colors">
+                        <i class="fa-solid fa-phone text-lavender-600"></i>
+                        <span>+63 938 019 1803</span>
+                    </a>
+                    <button onclick="openCart()" class="relative bg-lavender-700 hover:bg-lavender-800 text-white px-4 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2.5 transition-all shadow-md hover:shadow-lg active:scale-95">
+                        <i class="fa-solid fa-cart-shopping text-lavender-200"></i>
+                        <span class="hidden sm:inline">Cart</span>
+                        <span id="cart-badge" class="bg-purple-400 text-lavender-900 text-xs font-black w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-lavender-800 hover:text-lavender-600 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden border-t border-lavender-200 bg-lavender-50/95 backdrop-blur-md px-6 py-4 space-y-3">
+            <a href="#menu-section" onclick="toggleMobileMenu()" class="block py-2 text-lavender-800 font-semibold border-b border-lavender-100">Browse Menu</a>
+            <a href="#quick-links" onclick="toggleMobileMenu()" class="block py-2 text-lavender-800 font-semibold border-b border-lavender-100">Quick Links</a>
+            <a href="#store-info" onclick="toggleMobileMenu()" class="block py-2 text-lavender-800 font-semibold border-b border-lavender-100">Hours & Location</a>
+            <a href="#reviews" onclick="toggleMobileMenu()" class="block py-2 text-lavender-800 font-semibold border-b border-lavender-100">Customer Reviews</a>
+            <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-lavender-800 font-semibold">FAQ</a>
+            <a href="tel:+639380191803" class="flex items-center gap-2 text-xs font-bold text-lavender-700 bg-lavender-100 px-4 py-2.5 rounded-full mt-2 justify-center">
+                <i class="fa-solid fa-phone text-lavender-600"></i>
+                <span>+63 912 345 6789</span>
+            </a>
+        </div>
+    </header>
+    <!-- Hero Banner -->
+    <section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-32 bg-gradient-to-b from-lavender-100/60 via-lavender-50 to-lavender-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 bg-lavender-200/80 text-lavender-800 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-wand-magic-sparkles text-lavender-600"></i>
+                        <span>Artisanal Brews • Creamy Lattes • Handcrafted with Love</span>
+                    </div>
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold text-lavender-900 leading-tight">
+                        Experience Coffee Perfection at <span class="italic font-normal text-lavender-600">Mitch Coffee Shop 💜</span>
+                    </h1>
+                    <p class="text-lavender-700 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+                        Your cozy lavender coffee sanctuary in Maramag, Bukidnon. Savor rich espresso blends, creamy iced lattes, and custom-sweetened cold brews crafted daily.
+                    </p>
+                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <a href="#menu-section" class="w-full sm:w-auto bg-lavender-700 hover:bg-lavender-800 text-white px-8 py-3.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-lg text-center">
+                            Explore Menu
+                        </a>
+                        <a href="#quick-links" class="w-full sm:w-auto bg-white border border-lavender-200 hover:bg-lavender-100 text-lavender-800 px-8 py-3.5 rounded-full font-bold text-sm transition-all text-center">
+                            Order Ahead & Rewards
+                        </a>
+                    </div>
+                    <div class="pt-8 border-t border-lavender-200/80 grid grid-cols-3 gap-4 text-center lg:text-left">
+                        <div>
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-lavender-900">100%</span>
+                            <span class="text-xs font-semibold text-lavender-600">Arabica Coffee Beans</span>
+                        </div>
+                        <div>
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-lavender-900">25+</span>
+                            <span class="text-xs font-semibold text-lavender-600">Iced Specialty Drinks</span>
+                        </div>
+                        <div>
+                            <span class="block font-serif text-2xl sm:text-3xl font-bold text-lavender-900">4.9 ★</span>
+                            <span class="text-xs font-semibold text-lavender-600">500+ Happy Coffee Lovers</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-5 relative">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <div class="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative border-4 border-white">
+                            <img src="https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=1000&q=80" alt="Iced Spanish Latte" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-lavender-900/60 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 right-6 text-white">
+                                <span class="text-xs font-bold uppercase tracking-widest text-lavender-200 bg-lavender-800/80 px-2.5 py-1 rounded-md backdrop-blur-md">Bestseller</span>
+                                <h3 class="font-serif text-2xl font-bold mt-2">Iced Spanish Latte</h3>
+                                <p class="text-xs text-lavender-100 mt-1">Rich espresso blended with sweet creamy milk.</p>
+                            </div>
+                        </div>
+                        <div class="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-lavender-100 hidden sm:flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-lavender-100 text-lavender-700 flex items-center justify-center font-bold">
+                                ☕
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs text-lavender-900">Brewed Fresh Daily</h4>
+                                <p class="text-[11px] text-lavender-600">Premium quality espresso shots</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Quick Links & Amenities Grid -->
+    <section id="quick-links" class="py-12 bg-white border-y border-lavender-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <span class="text-xs font-bold uppercase tracking-widest text-lavender-500">Quick Services</span>
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-lavender-900 mt-1">Everything You Need at Mitch Coffee</h2>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <a href="#menu-section" class="group p-5 rounded-2xl bg-lavender-50/60 hover:bg-lavender-100 border border-lavender-100 text-center transition-all shadow-sm hover:shadow-md">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-white shadow-sm flex items-center justify-center text-lavender-600 text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clock text-lavender-600"></i>
+                    </div>
+                    <span class="block mt-3 text-xs font-bold text-lavender-900">Order Ahead</span>
+                    <span class="text-[10px] text-lavender-600">Skip the queue pickup</span>
+                </a>
+                <div class="group p-5 rounded-2xl bg-lavender-50/60 hover:bg-lavender-100 border border-lavender-100 text-center transition-all shadow-sm hover:shadow-md cursor-pointer" onclick="openPromoModal()">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-white shadow-sm flex items-center justify-center text-amber-500 text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gift"></i>
+                    </div>
+                    <span class="block mt-3 text-xs font-bold text-lavender-900">Rewards Program</span>
+                    <span class="text-[10px] text-lavender-600">Earn perks on every cup</span>
+                </div>
+                <a href="#store-info" class="group p-5 rounded-2xl bg-lavender-50/60 hover:bg-lavender-100 border border-lavender-100 text-center transition-all shadow-sm hover:shadow-md">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-600 text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <span class="block mt-3 text-xs font-bold text-lavender-900">Catering & Events</span>
+                    <span class="text-[10px] text-lavender-600">Sayre Highway, Maramag</span>
+                </a>
+                <a href="#store-info" class="group p-5 rounded-2xl bg-lavender-50/60 hover:bg-lavender-100 border border-lavender-100 text-center transition-all shadow-sm hover:shadow-md">
+                    <div class="w-12 h-12 mx-auto rounded-2xl bg-white shadow-sm flex items-center justify-center text-emerald-600 text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <span class="block mt-3 text-xs font-bold text-lavender-900">Visit Our Store</span>
+                    <span class="text-[10px] text-lavender-600">Sayre Highway, Maramag</span>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Menu Section & Search Filter -->
+    <section id="menu-section" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-widest text-lavender-500">Handcrafted Drinks</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-lavender-900 mt-1">Our Coffee Menu ☕</h2>
+            </div>
+            <div class="relative w-full md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-lavender-400 text-sm"></i>
+                <input type="text" id="search-input" onkeyup="handleSearch()" placeholder="Search spanish latte, caramel macchiato..." class="w-full bg-white border border-lavender-200 pl-10 pr-4 py-2.5 rounded-full text-xs font-medium text-lavender-900 focus:outline-none focus:ring-2 focus:ring-lavender-400 transition-all shadow-sm">
+            </div>
+        </div>
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar" id="category-tabs">
+            <button onclick="filterCategory('All')" class="tab-btn px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-lavender-700 text-white shadow-sm" data-cat="All">All Coffee Drinks</button>
+            <button onclick="filterCategory('Espresso')" class="tab-btn px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-lavender-100 text-lavender-800 hover:bg-lavender-200" data-cat="Espresso">Espresso & Lattes</button>
+            <button onclick="filterCategory('Iced')" class="tab-btn px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-lavender-100 text-lavender-800 hover:bg-lavender-200" data-cat="Iced">Iced Specialties</button>
+            <button onclick="filterCategory('NonCoffee')" class="tab-btn px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-lavender-100 text-lavender-800 hover:bg-lavender-200" data-cat="NonCoffee">Matcha & Chocolate</button>
+        </div>
+        <!-- Drinks Grid -->
+        <div id="drinks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        <!-- No Search Results Message -->
+        <div id="no-results" class="hidden text-center py-16">
+            <i class="fa-solid fa-mug-saucer text-4xl text-lavender-300 mb-3 block"></i>
+            <h3 class="text-lg font-bold text-lavender-900">No drinks found matching your search</h3>
+            <p class="text-xs text-lavender-600 mt-1">Try searching for caramel, matcha, latte, or clear your search input.</p>
+            <button onclick="filterCategory('All'); document.getElementById('search-input').value='';" class="mt-4 px-5 py-2 bg-lavender-700 text-white text-xs font-bold rounded-full">Reset Menu Filter</button>
+        </div>
+    </section>
+    <!-- Customer Reviews Section -->
+    <section id="reviews" class="py-20 bg-lavender-100/50 border-t border-lavender-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-lavender-500">Coffee Enthusiasts</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold text-lavender-900 mt-1">Loved By Local Coffee Lovers</h2>
+                <p class="text-xs sm:text-sm text-lavender-600 mt-2">See what our regulars have to say about their daily caffeine fix.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-lavender-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 gap-1 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-lavender-800 italic leading-relaxed">"The Iced Spanish Latte is hands down the best in town! Perfectly balanced, creamy and sweet."</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-lavender-50 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-lavender-900">Mitchie G.</h4>
+                            <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5"><i class="fa-solid fa-circle-check"></i> Regular Customer</span>
+                        </div>
+                        <span class="text-[10px] text-lavender-400">5/5 Stars</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-lavender-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 gap-1 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-lavender-800 italic leading-relaxed">"Super smooth, cold, and refreshing. The quality of their coffee beans really shines through."</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-lavender-50 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-lavender-900">Hannah P.</h4>
+                            <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5"><i class="fa-solid fa-circle-check"></i> Verified Buyer</span>
+                        </div>
+                        <span class="text-[10px] text-lavender-400">5/5 Stars</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-lavender-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 gap-1 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-lavender-800 italic leading-relaxed">"Fast service and amazing drinks! That creamy texture in the Spanish Latte is unbeatable."</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-lavender-50 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-lavender-900">Kevin T.</h4>
+                            <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5"><i class="fa-solid fa-circle-check"></i> Verified Buyer</span>
+                        </div>
+                        <span class="text-[10px] text-lavender-400">5/5 Stars</span>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-lavender-100 flex flex-col justify-between">
+                    <div>
+                        <div class="flex text-amber-400 gap-1 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-xs text-lavender-800 italic leading-relaxed">"Obsessed with their iced coffee options! Friendly baristas and top-tier drinks every single time."</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-lavender-50 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-lavender-900">Ryan M.</h4>
+                            <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5"><i class="fa-solid fa-circle-check"></i> Regular Customer</span>
+                        </div>
+                        <span class="text-[10px] text-lavender-400">5/5 Stars</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Store Info & Location Section -->
+    <section id="store-info" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="bg-lavender-50/70 p-8 rounded-3xl border border-lavender-200/70 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-lavender-200 flex items-center justify-center text-lavender-700 text-xl mb-6"><i class="fa-regular fa-clock"></i></div>
+                        <h3 class="font-serif text-xl font-bold text-lavender-900 mb-2">Opening Hours</h3>
+                        <p class="text-xs text-lavender-600 mb-4">Drop by our purple cozy corner for fresh coffee throughout the week.</p>
+                        <ul class="space-y-2 text-xs font-semibold text-lavender-800">
+                            <li class="flex justify-between py-1.5 border-b border-lavender-200/50"><span class="text-lavender-500">Monday – Saturday</span><span>10:00 AM – 7:00 PM</span></li>
+                            <li class="flex justify-between py-1.5"><span class="text-lavender-500">Sunday</span><span>9:00 AM – 6:00 PM</span></li>
+                        </ul>
+                    </div>
+                    <div class="mt-6 pt-4 bg-white rounded-2xl p-3.5 text-center border border-lavender-100">
+                        <span class="text-xs font-bold text-lavender-700">⚡ Order ahead available during store hours</span>
+                    </div>
+                </div>
+                <div class="bg-lavender-50/70 p-8 rounded-3xl border border-lavender-200/70 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-lavender-200 flex items-center justify-center text-lavender-700 text-xl mb-6"><i class="fa-solid fa-headset"></i></div>
+                        <h3 class="font-serif text-xl font-bold text-lavender-900 mb-2">Contact & Inquiry</h3>
+                        <p class="text-xs text-lavender-600 mb-4">Have questions about bulk coffee orders or catering events?</p>
+                        <div class="space-y-3 text-xs">
+                            <a href="tel:+639380191803" class="flex items-center gap-3 p-3.5 rounded-2xl bg-white hover:bg-lavender-100 text-lavender-900 transition-colors border border-lavender-100">
+                                <i class="fa-solid fa-phone text-lavender-600"></i>
+                                <div><span class="block text-[10px] text-lavender-500 font-bold">Hotline</span><span class="font-bold">+63 938 019 1803</span></div>
+                            </a>
+                            <a href="mailto:hello@mitchcoffee.com" class="flex items-center gap-3 p-3.5 rounded-2xl bg-white hover:bg-lavender-100 text-lavender-900 transition-colors border border-lavender-100">
+                                <i class="fa-regular fa-envelope text-lavender-600"></i>
+                                <div><span class="block text-[10px] text-lavender-500 font-bold">Email Support</span><span class="font-bold">rodrigomechele173.com</span></div>
+                            </a>
+                        </div>
+                    </div>
+                    <a href="tel:+639380191803" class="mt-6 text-center block w-full py-3 bg-lavender-700 hover:bg-lavender-800 text-white rounded-2xl text-xs font-bold transition-colors">Call Barista Desk</a>
+                </div>
+                <div class="bg-lavender-50/70 p-8 rounded-3xl border border-lavender-200/70 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-lavender-200 flex items-center justify-center text-lavender-700 text-xl mb-6"><i class="fa-solid fa-store"></i></div>
+                        <h3 class="font-serif text-xl font-bold text-lavender-900 mb-2">Store Location</h3>
+                        <p class="text-xs text-lavender-600 mb-4">Visit our cozy purple café space for dine-in and takeout options.</p>
+                        <p class="text-xs font-semibold text-lavender-800 leading-relaxed bg-white p-4 rounded-2xl border border-lavender-100">
+                            📍 Block 123, Soledad Subd., Brgy. Malakas, General Santos City, Philippines
+                        </p>
+                    </div>
+                    <div class="mt-6">
+                        <span class="text-[11px] text-lavender-500 block text-center font-semibold">Free High-speed Wi-Fi Available for Dine-In Guests 📶</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-lavender-50/40 border-t border-lavender-200/60">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-lavender-500">Barista Info</span>
+                <h2 class="font-serif text-3xl font-bold text-lavender-900 mt-1">Frequently Asked Questions</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="border border-lavender-200 bg-white rounded-2xl overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(1)" class="w-full px-6 py-4 text-left font-bold text-sm text-lavender-900 bg-white hover:bg-lavender-50/50 flex items-center justify-between transition-colors">
+                        <span>Can I customize sweetness and ice level for iced coffee drinks?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-lavender-500 transition-transform duration-300" id="faq-icon-1"></i>
+                    </button>
+                    <div id="faq-ans-1" class="hidden px-6 py-4 text-xs text-lavender-700 leading-relaxed border-t border-lavender-100">
+                        Absolutely! When adding any drink to your cart, you can select your preferred sweetness level (100%, 70%, 50%, or 25%) and ice level (Normal Ice, Less Ice, or No Ice).
+                    </div>
+                </div>
+                <div class="border border-lavender-200 bg-white rounded-2xl overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(2)" class="w-full px-6 py-4 text-left font-bold text-sm text-lavender-900 bg-white hover:bg-lavender-50/50 flex items-center justify-between transition-colors">
+                        <span>Do you offer non-dairy milk alternatives like oat or almond milk?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-lavender-500 transition-transform duration-300" id="faq-icon-2"></i>
+                    </button>
+                    <div id="faq-ans-2" class="hidden px-6 py-4 text-xs text-lavender-700 leading-relaxed border-t border-lavender-100">
+                        Yes! We offer fresh Whole Milk, Oat Milk (+₱25), and Almond Milk (+₱25) for all of our lattes and espresso drinks.
+                    </div>
+                </div>
+                <div class="border border-lavender-200 bg-white rounded-2xl overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(3)" class="w-full px-6 py-4 text-left font-bold text-sm text-lavender-900 bg-white hover:bg-lavender-50/50 flex items-center justify-between transition-colors">
+                        <span>How does Order Ahead work for pick-up?</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-lavender-500 transition-transform duration-300" id="faq-icon-3"></i>
+                    </button>
+                    <div id="faq-ans-3" class="hidden px-6 py-4 text-xs text-lavender-700 leading-relaxed border-t border-lavender-100">
+                        Select "Pick-up" during checkout, complete your order details, and your coffee will be freshly handcrafted and ready when you arrive at our Maramag storefront!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-lavender-900 text-lavender-200 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-lavender-800">
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-2xl bg-lavender-700 flex items-center justify-center text-white"><i class="fa-solid fa-mug-hot text-sm"></i></div>
+                        <span class="font-serif text-2xl font-bold tracking-tight text-white">Mitch Coffee Shop ☕</span>
+                    </div>
+                    <p class="text-xs text-lavender-300 leading-relaxed max-w-sm">
+                        Crafting signature espresso drinks, creamy lattes, and iced coffee specialties with pure love and premium coffee beans.
+                    </p>
+                    <div class="flex gap-3 pt-2">
+                        <a href="#" class="w-8 h-8 rounded-full bg-lavender-800 hover:bg-lavender-700 flex items-center justify-center text-xs text-white transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-lavender-800 hover:bg-lavender-700 flex items-center justify-center text-xs text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-lavender-800 hover:bg-lavender-700 flex items-center justify-center text-xs text-white transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div></div>
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-white mb-4">Coffee Shop Info</h4>
+                    <p class="text-xs text-lavender-300">+63 938 019 1803</p>
+                    <p class="text-xs text-lavender-300">rodrigomechele173@gmail.com</p>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-white mb-4">Coffee Storefront</h4>
+                    <p class="text-xs text-lavender-300 leading-relaxed mb-3">Block 123, Soledad Subd., Brgy. Malakas, General Santos City, Philippines</p>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-lavender-400">
+                <p>© 2026 Mitch Coffee Shop • Handcrafted with love 💜</p>
+                <div class="flex items-center gap-4 text-sm">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <i class="fa-solid fa-wallet"></i>
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Cart Drawer Overlay & Sidebar -->
+    <div id="cart-overlay" onclick="closeCart()" class="fixed inset-0 bg-lavender-900/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300 backdrop-blur-sm"></div>
+
+    <aside id="cart-drawer" class="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-6 border-b border-lavender-100 flex items-center justify-between bg-lavender-50">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-mug-hot text-lavender-700"></i>
+                <h3 class="font-serif font-bold text-lg text-lavender-900">Your Coffee Order</h3>
+            </div>
+            <button onclick="closeCart()" class="w-8 h-8 rounded-full bg-lavender-200 hover:bg-lavender-300 text-lavender-800 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+        <!-- Order Fulfillment Selector -->
+        <div class="px-6 py-3 bg-lavender-100/60 border-b border-lavender-200/50 flex gap-2">
+            <button onclick="setOrderType('Takeout')" id="type-takeout" class="flex-1 py-1.5 rounded-xl text-xs font-bold bg-lavender-700 text-white shadow-sm">Takeout</button>
+            <button onclick="setOrderType('Dine-In')" id="type-dinein" class="flex-1 py-1.5 rounded-xl text-xs font-bold bg-white text-lavender-800 border border-lavender-200">Dine-In</button>
+            <button onclick="setOrderType('Delivery')" id="type-delivery" class="flex-1 py-1.5 rounded-xl text-xs font-bold bg-white text-lavender-800 border border-lavender-200">Delivery</button>
+        </div>
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
+        <div class="p-6 border-t border-lavender-100 bg-lavender-50 space-y-4">
+            <div class="flex gap-2">
+                <input type="text" id="promo-input" placeholder="Promo code (Try: MITCH10)" class="flex-1 px-3.5 py-2.5 bg-white border border-lavender-200 rounded-xl text-xs uppercase font-bold focus:outline-none focus:ring-2 focus:ring-lavender-400">
+                <button onclick="applyPromo()" class="px-4 py-2.5 bg-lavender-200 hover:bg-lavender-300 text-lavender-800 rounded-xl text-xs font-bold transition-colors">Apply</button>
+            </div>
+            <div id="promo-message" class="text-[11px] font-bold hidden"></div>
+            <div class="space-y-2 text-xs text-lavender-800 pt-2 border-t border-lavender-200/70">
+                <div class="flex justify-between">
+                    <span>Subtotal</span>
+                    <span class="font-bold text-lavender-900">₱<span id="subtotal-price">0</span></span>
+                </div>
+                <div class="flex justify-between text-purple-700 hidden" id="discount-row">
+                    <span>Discount</span>
+                    <span class="font-bold">-₱<span id="discount-price">0</span></span>
+                </div>
+                <div class="flex justify-between text-lavender-600">
+                    <span id="fee-label">Takeout Packaging</span>
+                    <span class="font-bold text-lavender-900">₱<span id="fee-price">10</span></span>
+                </div>
+                <div class="flex justify-between text-base font-bold text-lavender-900 pt-2 border-t border-lavender-200">
+                    <span>Total Order</span>
+                    <span class="text-lavender-800">₱<span id="total-price">0</span></span>
+                </div>
+            </div>
+            <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-lavender-700 hover:bg-lavender-800 text-white rounded-2xl text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+                Proceed to Checkout
+            </button>
+        </div>
+    </aside>
+    <!-- Customization Modal -->
+    <div id="customize-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-lavender-900/50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl relative transform scale-95 transition-transform duration-300" id="customize-modal-content">
+            <button onclick="closeCustomizeModal()" class="absolute right-4 top-4 w-8 h-8 rounded-full bg-lavender-100 hover:bg-lavender-200 text-lavender-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="text-center mb-4">
+                <div class="w-14 h-14 rounded-2xl overflow-hidden mx-auto mb-2 border-2 border-lavender-200">
+                    <img id="custom-img" src="" class="w-full h-full object-cover">
+                </div>
+                <h3 class="font-serif text-lg font-bold text-lavender-900" id="custom-title">Drink Name</h3>
+                <p class="text-xs font-bold text-lavender-600" id="custom-price">₱125</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-lavender-900 mb-1.5">Sweetness Level</label>
+                    <select id="select-sweetness" class="w-full px-3 py-2 border border-lavender-200 rounded-xl bg-white font-semibold text-lavender-800 focus:outline-none">
+                        <option value="100%">100% Regular Sweetness</option>
+                        <option value="70%">70% Less Sweet</option>
+                        <option value="50%">50% Half Sweet</option>
+                        <option value="25%">25% Mild Sweetness</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-lavender-900 mb-1.5">Ice Preference</label>
+                    <select id="select-ice" class="w-full px-3 py-2 border border-lavender-200 rounded-xl bg-white font-semibold text-lavender-800 focus:outline-none">
+                        <option value="Regular Ice">Regular Ice</option>
+                        <option value="Less Ice">Less Ice</option>
+                        <option value="No Ice">No Ice</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-lavender-900 mb-1.5">Milk Option</label>
+                    <select id="select-milk" class="w-full px-3 py-2 border border-lavender-200 rounded-xl bg-white font-semibold text-lavender-800 focus:outline-none">
+                        <option value="Whole Milk">Whole Fresh Milk (Default)</option>
+                        <option value="Oat Milk (+₱25)">Oat Milk (+₱25)</option>
+                        <option value="Almond Milk (+₱25)">Almond Milk (+₱25)</option>
+                    </select>
+                </div>
+                <button onclick="confirmAddToCart()" class="w-full py-3 bg-lavender-700 hover:bg-lavender-800 text-white font-bold rounded-xl text-xs uppercase tracking-wider mt-2">
+                    Add Customized Drink to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-lavender-900/50 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-transform duration-300" id="checkout-modal-content">
+            <button onclick="closeCheckoutModal()" class="absolute right-5 top-5 w-8 h-8 rounded-full bg-lavender-100 hover:bg-lavender-200 text-lavender-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-full bg-lavender-100 text-lavender-700 flex items-center justify-center mx-auto mb-3 text-xl">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold text-lavender-900">Checkout Coffee Order</h3>
+                <p class="text-xs text-lavender-600 mt-1">Fill out your pickup or delivery information</p>
+            </div>
+            <form onsubmit="confirmOrder(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-lavender-800 font-bold mb-1">Customer Name</label>
+                    <input type="text" required placeholder="e.g. Mitchie Garcia" class="w-full px-3.5 py-2.5 border border-lavender-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-lavender-400">
+                </div>
+                <div>
+                    <label class="block text-lavender-800 font-bold mb-1">Mobile Contact</label>
+                    <input type="tel" required placeholder="+63 9XX XXX XXXX" class="w-full px-3.5 py-2.5 border border-lavender-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-lavender-400">
+                </div>
+                <div>
+                    <label class="block text-lavender-800 font-bold mb-1">Pickup Notes / Delivery Address</label>
+                    <textarea required rows="2" placeholder="Street, Barangay, or estimated arrival time" class="w-full px-3.5 py-2 border border-lavender-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-lavender-400"></textarea>
+                </div>
+                <div>
+                    <label class="block text-lavender-800 font-bold mb-1">Payment Method</label>
+                    <select class="w-full px-3.5 py-2.5 border border-lavender-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-lavender-400 bg-white font-medium">
+                        <option>GCash / E-Wallet</option>
+                        <option>Cash on Delivery / Pickup</option>
+                        <option>Credit / Debit Card</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-lavender-700 hover:bg-lavender-800 text-white font-bold rounded-xl text-xs uppercase tracking-wider mt-4">
+                    Confirm Coffee Order
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-lavender-900 text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <div class="w-7 h-7 rounded-full bg-purple-400 flex items-center justify-center text-xs text-lavender-900 font-bold">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <h5 class="text-xs font-bold" id="toast-title">Added to Cart!</h5>
+            <p class="text-[11px] text-lavender-300" id="toast-message">Your drink customization was saved.</p>
+        </div>
+    </div>
+    <!-- JavaScript Logic -->
+    <script>
+        const drinks = [
+            { id: 1, name: 'Iced Spanish Latte', category: 'Iced', price: 125, desc: 'Rich double espresso shot blended with creamy sweetened milk and chilled ice.', image: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80', rating: '5.0', tag: 'Bestseller' },
+            { id: 2, name: 'Iced Caramel Macchiato', category: 'Iced', price: 135, desc: 'Velvety milk, espresso shots, real caramel drizzle over ice.', image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80', rating: '4.9', tag: 'Popular' },
+            { id: 3, name: 'Iced Vanilla Latte', category: 'Espresso', price: 120, desc: 'Smooth espresso, chilled fresh milk, Madagascar vanilla syrup over ice.', image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=600&q=80', rating: '4.8', tag: 'Classic' },
+            { id: 4, name: 'Iced Hazelnut Latte', category: 'Espresso', price: 135, desc: 'Nutty hazelnut flavor notes combined with fresh espresso and cold milk.', image: 'https://images.unsplash.com/photo-1589396575653-c09c794ff6a6?auto=format&fit=crop&w=600&q=80', rating: '4.7', tag: 'Nutty' },
+            { id: 5, name: 'Iced Mocha Cold Brew', category: 'Iced', price: 130, desc: 'Rich chocolate cocoa meets cold brewed espresso goodness served ice cold.', image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80', rating: '4.9', tag: 'Rich Cocoa' },
+            { id: 6, name: 'Iced Matcha Coffee', category: 'NonCoffee', price: 145, desc: 'Layered Japanese Uji matcha, fresh milk, and espresso shot topped with ice.', image: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80', rating: '4.8', tag: 'Specialty' },
+            { id: 7, name: 'Iced Chocolate Mocha', category: 'NonCoffee', price: 125, desc: 'Indulgent dark chocolate, espresso, chilled fresh milk, and ice.', image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80', rating: '4.7', tag: 'Favorite' },
+            { id: 8, name: 'Iced Brown Sugar Latte', category: 'Espresso', price: 140, desc: 'Caramelized brown sugar syrup, double espresso, and creamy whole milk.', image: 'https://images.unsplash.com/photo-1499961024600-ad094db305cc?auto=format&fit=crop&w=600&q=80', rating: '4.9', tag: 'Sweet' }];
+        let cart = [];
+        let activeCategory = 'All';
+        let discountPercent = 0;
+        let selectedOrderType = 'Takeout';
+        let currentCustomizingItem = null;
+        function renderDrinks(itemsToRender) {
+            const grid = document.getElementById('drinks-grid');
+            const noResults = document.getElementById('no-results');
+            if (itemsToRender.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;}
+            noResults.classList.add('hidden');
+            grid.innerHTML = itemsToRender.map(item => `
+                <article class="drink-card bg-white rounded-3xl overflow-hidden border border-lavender-200/70 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="relative aspect-[4/3] overflow-hidden bg-lavender-100">
+                            <img src="${item.image}" alt="${item.name}" loading="lazy" class="drink-card-img w-full h-full object-cover">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-lavender-900 text-[10px] font-bold px-3 py-1 rounded-full border border-lavender-100 shadow-sm">${item.tag}</span>
+                            <div class="absolute bottom-3 right-3 bg-lavender-900/80 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                                <i class="fa-solid fa-star text-amber-400 text-[10px]"></i>
+                                <span>${item.rating}</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <span class="text-[10px] uppercase font-bold text-lavender-500 tracking-wider">${item.category}</span>
+                            <h3 class="font-serif font-bold text-lg text-lavender-900 mt-0.5 leading-snug">${item.name}</h3>
+                            <p class="text-xs text-lavender-600 mt-1.5 line-clamp-2 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 flex items-center justify-between mt-2">
+                        <div>
+                            <span class="text-[10px] text-lavender-400 block uppercase tracking-wider font-bold">Price</span>
+                            <span class="font-serif font-bold text-lg text-lavender-900">₱${item.price}</span>
+                        </div>
+                        <button onclick="openCustomizeModal(${item.id})" class="bg-lavender-100 hover:bg-lavender-700 text-lavender-800 hover:text-white px-4 py-2.5 rounded-xl font-bold text-xs transition-colors duration-200 flex items-center gap-1.5 active:scale-95">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </article>
+            `).join('');}
+        function filterCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = btn.dataset.cat === cat ? 'tab-btn px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-lavender-700 text-white shadow-sm' : 'tab-btn px-5 py-2.5 rounded-full text-xs font-bold transition-all bg-lavender-100 text-lavender-800 hover:bg-lavender-200';});
+            const filtered = cat === 'All' ? drinks : drinks.filter(d => d.category === cat);
+            renderDrinks(filtered);}
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const searchResults = drinks.filter(d => d.name.toLowerCase().includes(query) || d.desc.toLowerCase().includes(query) || d.category.toLowerCase().includes(query));
+            renderDrinks(searchResults);}
+        function openCustomizeModal(id) {
+            currentCustomizingItem = drinks.find(d => d.id === id);
+            document.getElementById('custom-title').textContent = currentCustomizingItem.name;
+            document.getElementById('custom-price').textContent = `₱${currentCustomizingItem.price}`;
+            document.getElementById('custom-img').src = currentCustomizingItem.image;
+            const modal = document.getElementById('customize-modal');
+            const content = document.getElementById('customize-modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');}
+        function closeCustomizeModal() {
+            const modal = document.getElementById('customize-modal');
+            const content = document.getElementById('customize-modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.add('scale-95');}
+        function confirmAddToCart() {
+            if (!currentCustomizingItem) return;
+            const sweetness = document.getElementById('select-sweetness').value;
+            const ice = document.getElementById('select-ice').value;
+            const milk = document.getElementById('select-milk').value;
+            let extraCost = 0;
+            if (milk.includes('+₱25')) extraCost += 25;
+            const cartKey = `${currentCustomizingItem.id}-${sweetness}-${ice}-${milk}`;
+            const existing = cart.find(c => c.cartKey === cartKey);
+            if (existing) {
+                existing.qty += 1;} else {cart.push({
+                    cartKey,
+                    id: currentCustomizingItem.id,
+                    name: currentCustomizingItem.name,
+                    basePrice: currentCustomizingItem.price,
+                    finalPrice: currentCustomizingItem.price + extraCost,
+                    image: currentCustomizingItem.image,
+                    sweetness,
+                    ice,
+                    milk,
+                    qty: 1});}
+            closeCustomizeModal();
+            updateCartUI();
+            showToast('Drink Added! ☕', `${currentCustomizingItem.name} added to cart.`);}
+        function updateQty(cartKey, delta) {
+            const item = cart.find(c => c.cartKey === cartKey);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) cart = cart.filter(c => c.cartKey !== cartKey);
+            updateCartUI();}
+        function setOrderType(type) {
+            selectedOrderType = type;
+            document.getElementById('type-takeout').className = type === 'Takeout' ? 'flex-1 py-1.5 rounded-xl text-xs font-bold bg-lavender-700 text-white shadow-sm' : 'flex-1 py-1.5 rounded-xl text-xs font-bold bg-white text-lavender-800 border border-lavender-200';
+            document.getElementById('type-dinein').className = type === 'Dine-In' ? 'flex-1 py-1.5 rounded-xl text-xs font-bold bg-lavender-700 text-white shadow-sm' : 'flex-1 py-1.5 rounded-xl text-xs font-bold bg-white text-lavender-800 border border-lavender-200';
+            document.getElementById('type-delivery').className = type === 'Delivery' ? 'flex-1 py-1.5 rounded-xl text-xs font-bold bg-lavender-700 text-white shadow-sm' : 'flex-1 py-1.5 rounded-xl text-xs font-bold bg-white text-lavender-800 border border-lavender-200';
+            const feeLabel = document.getElementById('fee-label');
+            const feePrice = document.getElementById('fee-price');
+            if (type === 'Delivery') {
+                feeLabel.textContent = 'Local Express Delivery';
+                feePrice.textContent = '50';} else if (type === 'Takeout') {
+                feeLabel.textContent = 'Takeout Packaging Fee';
+                feePrice.textContent = '10';} else {
+                feeLabel.textContent = 'Dine-In Service Fee';
+                feePrice.textContent = '0';}
+            updateCartUI();}
+        function applyPromo() {
+            const code = document.getElementById('promo-input').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-message');
+            if (code === 'MITCH10') {
+                discountPercent = 0.10;
+                msg.textContent = '✓ 10% Coffee Discount Applied!';
+                msg.className = 'text-[11px] font-bold text-purple-700 block';} else {
+                discountPercent = 0;
+                msg.textContent = '✕ Invalid promo code. Use MITCH10';
+                msg.className = 'text-[11px] font-bold text-rose-500 block';}
+            updateCartUI();}
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-badge');
+            const subtotalEl = document.getElementById('subtotal-price');
+            const discountEl = document.getElementById('discount-price');
+            const discountRow = document.getElementById('discount-row');
+            const totalEl = document.getElementById('total-price');
+            const totalCount = cart.reduce((acc, c) => acc + c.qty, 0);
+            badge.textContent = totalCount;
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 px-4">
+                        <div class="w-16 h-16 rounded-full bg-lavender-100 text-lavender-400 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fa-solid fa-mug-hot"></i></div>
+                        <h4 class="font-bold text-lavender-900 text-sm">Your coffee cart is empty</h4>
+                        <p class="text-xs text-lavender-600 mt-1 max-w-xs mx-auto">Explore our iced coffee specialty menu to select your drinks.</p>
+                        <button onclick="closeCart()" class="mt-4 px-5 py-2 bg-lavender-700 text-white rounded-full text-xs font-bold">Browse Coffee</button>
+                    </div>`;} else {
+                container.innerHTML = cart.map(item => `
+                    <div class="p-3 bg-lavender-50/80 rounded-2xl border border-lavender-100 flex flex-col gap-2">
+                        <div class="flex items-center gap-3">
+                            <img src="${item.image}" alt="${item.name}" class="w-14 h-14 rounded-xl object-cover">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-xs font-bold text-lavender-900 truncate">${item.name}</h4>
+                                <p class="text-xs font-bold text-lavender-700 mt-0.5">₱${item.finalPrice}</p>
+                            </div>
+                            <div class="flex items-center gap-2 bg-white rounded-xl border border-lavender-200 px-2 py-1">
+                                <button onclick="updateQty('${item.cartKey}', -1)" class="text-lavender-700 hover:text-lavender-900 w-5 h-5 flex items-center justify-center text-xs font-bold">-</button>
+                                <span class="text-xs font-bold text-lavender-900 w-4 text-center">${item.qty}</span>
+                                <button onclick="updateQty('${item.cartKey}', 1)" class="text-lavender-700 hover:text-lavender-900 w-5 h-5 flex items-center justify-center text-xs font-bold">+</button>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-lavender-600 bg-white/70 p-2 rounded-lg font-semibold flex flex-wrap gap-2">
+                            <span>🍬 Sweetness: ${item.sweetness}</span>
+                            <span>🧊 Ice: ${item.ice}</span>
+                            <span>🥛 ${item.milk}</span>
+                        </div>
+                    </div>`).join('');}
+            const subtotal = cart.reduce((acc, c) => acc + (c.finalPrice * c.qty), 0);
+            const discountAmt = subtotal * discountPercent;
+            let fee = 0;
+            if (cart.length > 0) {
+                if (selectedOrderType === 'Delivery') fee = 50;
+                else if (selectedOrderType === 'Takeout') fee = 10;}
+            const total = Math.max(0, subtotal - discountAmt + fee);
+            subtotalEl.textContent = subtotal.toLocaleString();
+            if (discountPercent > 0) {
+                discountEl.textContent = discountAmt.toLocaleString();
+                discountRow.classList.remove('hidden');} else {discountRow.classList.add('hidden');}
+            totalEl.textContent = total.toLocaleString();}
+        function openCart() {
+            document.getElementById('cart-drawer').classList.remove('translate-x-full');
+            document.getElementById('cart-overlay').classList.remove('opacity-0', 'pointer-events-none');}
+        function closeCart() {
+            document.getElementById('cart-drawer').classList.add('translate-x-full');
+            document.getElementById('cart-overlay').classList.add('opacity-0', 'pointer-events-none');}
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');}
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);}
+        function openPromoModal() {
+            showToast('Rewards Perk! 🎁', 'Use code MITCH10 at checkout for 10% OFF!');}
+        function toggleFaq(index) {
+            const ans = document.getElementById(`faq-ans-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            if (ans.classList.contains('hidden')) {
+                ans.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';} else {
+                ans.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';}}
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('Cart Empty', 'Please add drinks before proceeding to checkout.');
+                return;}
+            closeCart();
+            const modal = document.getElementById('checkout-modal');
+            const content = document.getElementById('checkout-modal-content');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');}
+        function closeCheckoutModal() {
+            const modal = document.getElementById('checkout-modal');
+            const content = document.getElementById('checkout-modal-content');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.add('scale-95');}
+        function confirmOrder(e) {
+            e.preventDefault();
+            closeCheckoutModal();
+            cart = [];
+            discountPercent = 0;
+            document.getElementById('promo-input').value = '';
+            document.getElementById('promo-message').classList.add('hidden');
+            updateCartUI();
+            showToast('Order Received! 💜', 'Thank you! Your coffee is being handcrafted now.');}
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDrinks(drinks);
+            updateCartUI();});
+    </script>
+</body>
+</html>
